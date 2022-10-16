@@ -4,6 +4,8 @@ import Card from "../components/Card";
 import MainButton from "../components/MainButton";
 import NumberContainer from "../components/NumberContainer";
 import DefaultStyles from "../constants/default-styles";
+// Icons
+import {Ionicons} from '@expo/vector-icons';
 
 const generateRandomNumberBetween = (min, max, exclude) => {
   min = Math.ceil(min);
@@ -67,10 +69,10 @@ const GameScreen = (props) => {
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card style={styles.buttonContainer}>
         <MainButton onPress={nextGuessHandler.bind(this, "lower")}>
-          Lower
+          <Ionicons name="md-remove" size={24} color="white"/>
         </MainButton>
         <MainButton onPress={nextGuessHandler.bind(this, "greater")}>
-          Greater{" "}
+          <Ionicons name="md-add" size={24} color="white"/>
         </MainButton>
       </Card>
     </View>
