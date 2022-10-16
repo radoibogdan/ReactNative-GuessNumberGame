@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, Button, Alert } from "react-native";
 import Card from "../components/Card";
+import MainButton from "../components/MainButton";
 import NumberContainer from "../components/NumberContainer";
 import DefaultStyles from "../constants/default-styles";
 
@@ -24,16 +25,16 @@ const GameScreen = (props) => {
   // useRef => the component does not recalculate this on rerender
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
-  
+
   // Object destructuring (stores props.userChoice in a constant named userChoice)
-  const {userChoice, onGameOver} = props;
+  const { userChoice, onGameOver } = props;
 
   // Executed AFTER the component is rendered if one of these changed (userChoice, onGameOver, currentGuess)
   useEffect(() => {
     if (currentGuess === userChoice) {
       onGameOver(rounds);
     }
-  }, [userChoice, onGameOver, currentGuess])
+  }, [userChoice, onGameOver, currentGuess]);
 
   const nextGuessHandler = (direction) => {
     if (
@@ -57,7 +58,7 @@ const GameScreen = (props) => {
       currentGuess
     );
     setCurrentGuess(nextNumber);
-    setRounds(curRounds => curRounds + 1);
+    setRounds((curRounds) => curRounds + 1);
   };
 
   return (
@@ -65,11 +66,12 @@ const GameScreen = (props) => {
       <Text style={DefaultStyles.title}>Opponents guess</Text>
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card style={styles.buttonContainer}>
-        <Button title="Lower" onPress={nextGuessHandler.bind(this, "lower")} />
-        <Button
-          title="Greater"
-          onPress={nextGuessHandler.bind(this, "greater")}
-        />
+        <MainButton onPress={nextGuessHandler.bind(this, "lower")}>
+          Lower
+        </MainButton>
+        <MainButton onPress={nextGuessHandler.bind(this, "greater")}>
+          Greater{" "}
+        </MainButton>
       </Card>
     </View>
   );
@@ -85,8 +87,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     marginTop: 20,
-    width: 300,
-    maxWidth: "80%",
+    width: 400,
+    maxWidth: "95%",
   },
 });
 
