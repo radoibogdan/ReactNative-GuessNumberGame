@@ -8,9 +8,11 @@ import {
   Keyboard, // Native api
   Alert, // Native api
 } from "react-native";
+import BodyText from "../components/BodyText";
 import Card from "../components/Card";
 import Input from "../components/Input";
 import NumberContainer from "../components/NumberContainer";
+import TitleText from "../components/TitleText";
 import Colors from "../constants/colors";
 
 const StartGameScreen = (props) => {
@@ -51,7 +53,7 @@ const StartGameScreen = (props) => {
   if (confirmed) {
     confirmedOutput = (
       <Card style={styles.summaryContainer}>
-        <Text>You selected</Text>
+        <BodyText>You selected</BodyText>
         <NumberContainer>{selectedNumber}</NumberContainer>
         <Button title="START GAME" onPress={() => props.onStartGame(selectedNumber)}/>
       </Card>
@@ -62,9 +64,9 @@ const StartGameScreen = (props) => {
     // TouchableWithoutFeedback - Register a touch listener without giving any visual feedback
     <TouchableWithoutFeedback onPress={iosCloseKeyboardHandler}>
       <View style={styles.screen}>
-        <Text style={styles.title}>Start a new Game !</Text>
+        <TitleText style={styles.title}>Start a new Game !</TitleText>
         <Card style={styles.inputContainer}>
-          <Text>Select a number</Text>
+          <BodyText>Select a number</BodyText>
           <Input
             onChangeText={numberInputHandler}
             value={enteredValue}
@@ -106,7 +108,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontSize: 20,
     marginVertical: 10,
   },
   inputContainer: {
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
   summaryContainer: {
     marginTop: 20,
     alignItems: 'center',
-  },
+  }
 });
 
 export default StartGameScreen;
