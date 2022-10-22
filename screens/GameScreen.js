@@ -16,6 +16,8 @@ import DefaultStyles from "../constants/default-styles";
 // Icons
 import { Ionicons } from "@expo/vector-icons";
 import BodyText from "../components/BodyText";
+import { ScreenOrientation } from "expo-screen-orientation";
+
 
 const generateRandomNumberBetween = (min, max, exclude) => {
   min = Math.ceil(min);
@@ -36,17 +38,31 @@ const renderListItem = (listLength, itemData) => (
   </View>
 );
 
+
 const GameScreen = (props) => {
+  // ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
   const initialGuess = generateRandomNumberBetween(1, 100, props.userChoice);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
-  const [pastGuesses, setPastGuesses] = useState([initialGuess.toString()]);
-
+  const [pastGuesses, setPastGuesses] = useState([initialGuess.toString()]); 
+  const [availableDeviceWidth, setAvailableDeviceWidth] = useState(Dimensions.get("window").width);
+  const [availableDeviceHeight, setAvailableDeviceHeight] = useState(Dimensions.get("window").height);
   // useRef => the component does not recalculate this on rerender
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
-
   // Object destructuring (stores props.userChoice in a constant named userChoice)
   const { userChoice, onGameOver } = props;
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setAvailableDeviceHeight(Dimensions.get("window").height);
+      setAvailableDeviceWidth(Dimensions.get("window").width);
+    }
+    const souscription = Dimensions.addEventListener("change", updateLayout);
+    // cleanup function => runs before useEffect;
+    return () => {
+      souscription.remove();
+    };
+  });
 
   // Executed AFTER the component is rendered if one of these changed (userChoice, onGameOver, currentGuess)
   useEffect(() => {
@@ -85,8 +101,33 @@ const GameScreen = (props) => {
   };
 
   let listContainerStyle = styles.listContainer;
-  if (Dimensions.get("window").width < 350) {
+  if (availableDeviceWidth < 350) {
     listContainerStyle = styles.listContainerBig;
+  }
+
+  if (availableDeviceHeight < 500) {
+    return (
+      <View style={styles.screen}>
+        <Text style={DefaultStyles.title}>Opponents guess</Text>
+        <View style={styles.controls}>
+          <MainButton onPress={nextGuessHandler.bind(this, "lower")}>
+            <Ionicons name="md-remove" size={24} color="white" />
+          </MainButton>
+          <NumberContainer>{currentGuess}</NumberContainer>
+          <MainButton onPress={nextGuessHandler.bind(this, "greater")}>
+            <Ionicons name="md-add" size={24} color="white" />
+          </MainButton>
+        </View>
+        <View style={listContainerStyle}>
+          <FlatList
+            keyExtractor={(item) => item}
+            data={pastGuesses}
+            renderItem={renderListItem.bind(this, pastGuesses.length)}
+            contentContainerStyle={styles.list}
+          />
+        </View>
+      </View>
+    );
   }
 
   return (
@@ -154,6 +195,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+  },
+  controls: {
+    width: "80%",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
 });
 

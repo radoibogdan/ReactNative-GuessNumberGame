@@ -33,7 +33,6 @@ const StartGameScreen = (props) => {
       setButtonWidth(Dimensions.get("window").width / 4);
     };
     const souscription = Dimensions.addEventListener("change", updateLayout);
-
     // cleanup function => runs before useEffect;
     return () => {
       souscription.remove();
