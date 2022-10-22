@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, SafeAreaView } from "react-native";
 import * as Font from "expo-font";
-import * as SplashScreen from 'expo-splash-screen';
+import * as SplashScreen from "expo-splash-screen";
 
 import Header from "./components/Header";
 import StartGameScreen from "./screens/StartGameScreen";
@@ -19,9 +19,9 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
-         await Font.loadAsync({
-          'open-sans': require("./assets/fonts/OpenSans-Regular.ttf"),
-          'open-sans-bold': require("./assets/fonts/OpenSans-Bold.ttf")
+        await Font.loadAsync({
+          "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
+          "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
         });
         // Fake Await Time
         // await new Promise(resolve => setTimeout(resolve, 5000));
@@ -67,6 +67,7 @@ export default function App() {
 
   const onLayoutRootView = useCallback(async () => {
     if (dataLoaded) {
+      // hideAsync - Hide the splash screen after resources are loaded
       await SplashScreen.hideAsync();
     }
   }, [dataLoaded]);
@@ -75,11 +76,12 @@ export default function App() {
     return null;
   }
 
+  // SafeAreaView => Adds padding on screen for phones who have a notch or overlapping elements like IOS
   return (
-    <View style={styles.screen} onLayout={onLayoutRootView}>
-      <Header title="Guess Game" />
-      {content}
-    </View>
+    <SafeAreaView style={styles.screen} onLayout={onLayoutRootView}>
+        <Header title="Guess Game" />
+        {content}
+    </SafeAreaView>
   );
 }
 
